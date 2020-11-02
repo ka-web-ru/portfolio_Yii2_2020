@@ -1,0 +1,48 @@
+
+Options -Indexes 
+ErrorDocument 404 /404.php
+
+<IfModule mod_php5.c>
+  php_flag session.use_trans_sid off
+  #php_flag default_charset UTF-8
+  #php_value display_errors 1
+</IfModule>
+
+<IfModule mod_php7.c>
+  php_flag session.use_trans_sid off
+  #php_flag default_charset UTF-8
+  #php_value display_errors 1
+</IfModule>
+
+<IfModule mod_rewrite.c>
+	Options +FollowSymLinks
+	RewriteEngine On
+
+  #hide files and folders
+  RedirectMatch 404 /\.git
+  RedirectMatch 404 /composer\.
+  RedirectMatch 404 /.bowerrc
+
+	# if $showScriptName is false in UrlManager, do not allow accessing URLs with script name
+	RewriteRule ^index.php/ - [L,R=404]
+
+	# If a directory or a file exists, use the request directly
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+
+	# Otherwise forward the request to index.php
+	RewriteRule . index.php
+</IfModule>
+
+<IfModule mod_dir.c>
+  DirectoryIndex index.php index.html
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive on
+  ExpiresByType image/jpeg "access plus 3 day"
+  ExpiresByType image/gif "access plus 3 day"
+  ExpiresByType image/png "access plus 3 day"
+  ExpiresByType text/css "access plus 3 day"
+  ExpiresByType application/javascript "access plus 3 day"  
+</IfModule>
